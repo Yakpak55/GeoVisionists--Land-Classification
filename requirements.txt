@@ -1,0 +1,10 @@
+torch
+torchvision
+pytorch-lightning
+configilm
+datasets
+rasterio
+pandas
+scikit-learn
+matplotlib
+zstandard
