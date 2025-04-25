@@ -36,3 +36,37 @@ Install with:
 
 ```bash
 pip install -r requirements.txt
+
+
+Data Preparation
+Download Sentinel-2 patches into BigEarthNet-S2/ (not included in this repo).
+
+Place metadata.parquet in the project root (alongside scripts/).
+
+Optional) Filter Portugal
+python -m scripts.filter_portugal \
+  --metadata global_metadata.parquet \
+  --output metadata.parquet \
+  --region PORTUGAL
+
+
+Train
+Train on a random subset (e.g., 5 000 samples) with custom hyperparameters:
+python -m scripts.train \
+  --data_root ./BigEarthNet-S2 \
+  --metadata ./metadata.parquet \
+  --subset_size 5000 \
+  --batch_size 16 \
+  --num_workers 4 \
+  --max_epochs 10 \
+  --hidden_dim 64 \
+  --num_layers 2 \
+  --dropout 0.3 \
+  --lr 1e-3
+
+Evaluate
+Compute metrics on the held-out validation set:
+python -m scripts.evaluate \
+  --checkpoint lightning_logs/version_0/checkpoints/best.ckpt \
+  --data_root ./BigEarthNet-S2 \
+  --metadata ./metadata.parquet
